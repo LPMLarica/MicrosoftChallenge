@@ -1,4 +1,3 @@
-import pytest
 from app.agents.intake_agent import IntakeAgent
 from app.services.vector_knowledge import VectorKnowledge
 

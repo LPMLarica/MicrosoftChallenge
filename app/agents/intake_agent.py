@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
 import uuid, datetime
-from app.services.vector_knowledge import VectorKnowledge
 
 def now_iso(): return datetime.datetime.utcnow().isoformat()+'Z'
 
@@ -19,7 +18,7 @@ class Ticket:
     metadata: dict = field(default_factory=dict)
 
 class IntakeAgent:
-    def __init__(self, name, knowledge: VectorKnowledge):
+    def __init__(self, name, knowledge):
         self.name = name
         self.knowledge = knowledge
 

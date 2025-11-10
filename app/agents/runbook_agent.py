@@ -1,4 +1,4 @@
-from app.services.runbooks import evaluate_runbook_safety, execute_runbook
+from services.runbooks import evaluate_runbook_safety, execute_runbook
 
 class RunbookAgent:
     def __init__(self, name, knowledge):
@@ -14,7 +14,7 @@ class RunbookAgent:
         if not safe:
             self.log(ticket, 'runbook_blocked', str(reasons))
             return {'status':'blocked','reasons':reasons}
-        inputs = {k: ticket.metadata.get(k, 'AUTO') for k in []}  # simplified
+        inputs = {k: ticket.metadata.get(k, 'AUTO') for k in []}
         result = execute_runbook(runbook_id, ticket, inputs)
         self.log(ticket, 'runbook_executed', result.get('outcome'))
         return result

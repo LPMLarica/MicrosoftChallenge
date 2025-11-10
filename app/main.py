@@ -1,13 +1,10 @@
-"""Streamlit entry for Service Central"""
-import os
+"""Streamlit entry for Service Central - Free HF edition"""
 import streamlit as st
-from app.agents.intake_agent import IntakeAgent
-from app.agents.triage_agent import TriageAgent
-from app.agents.runbook_agent import RunbookAgent
-from app.agents.human_agent import HumanAgent
-from app.services.hf_client import huggingface_infer
-from app.config.settings import settings
-from app.services.vector_knowledge import VectorKnowledge
+from agents.intake_agent import IntakeAgent
+from agents.triage_agent import TriageAgent
+from agents.runbook_agent import RunbookAgent
+from agents.human_agent import HumanAgent
+from services.vector_knowledge import VectorKnowledge
 from dataclasses import asdict
 import json
 
@@ -23,11 +20,11 @@ if 'agents' not in st.session_state:
     st.session_state['agents'] = {
         'intake': IntakeAgent('IntakeAgent', st.session_state['knowledge']),
         'triage': TriageAgent('TriageAgent', st.session_state['knowledge']),
-        'runbook': RunbookAgent('RunbookAgent', st.session_state['knowledge']),
+        'runbook_id': RunbookAgent('RunbookAgent', st.session_state['knowledge']),
         'human': HumanAgent('HumanAgent', st.session_state['knowledge'])
     }
 
-st.sidebar.title('Service Central')
+st.sidebar.title('Service Central — Free HF')
 view = st.sidebar.radio('View', ['New Ticket', 'Ticket Queue', 'Agent View', 'Admin'])
 
 if view == 'New Ticket':
@@ -49,24 +46,31 @@ if view == 'New Ticket':
 
 elif view == 'Ticket Queue':
     st.header('Ticket queue')
-    for tid, ticket in st.session_state['store'].items():
+    for tid, ticket in list(st.session_state['store'].items()):
         with st.expander(f"{tid} - {ticket.subject} - {ticket.user_display}"):
             st.write(ticket.description)
-            if st.button('Automatic triage', key=f'triage-{tid}'):
+            col1, col2, col3 = st.columns(3)
+            if col1.button('Automatic triage', key=f'triage-{tid}'):
                 triage = st.session_state['agents']['triage']
                 decision = triage.triage(ticket)
                 st.json(decision)
-            if st.button('Execute suggested runbook', key=f'run-{tid}'):
+            if col2.button('Execute suggested runbook', key=f'run-{tid}'):
                 triage = st.session_state['agents']['triage']
                 decision = triage.triage(ticket)
                 if decision.get('suggested_runbook'):
-                    rb = st.session_state['agents']['runbook']
+                    rb = st.session_state['agents']['runbook_id']
                     res = rb.consider_and_run(ticket, decision['suggested_runbook'], auto_approve=True)
                     st.json(res)
                 else:
                     st.warning('No runbook suggested')
+            if col3.button('Escalate to human', key=f'escalate-{tid}'):
+                human = st.session_state['agents']['human']
+                human.handle(ticket, 'Escalated for human review')
+                st.success('Escalated')
             st.markdown('**Trace**')
-            st.json([asdict(s) if hasattr(s,'__dict__') else s for s in ticket.steps])
+            st.json([s for s in ticket.steps])
+            st.markdown('**Runbook executions**')
+            st.json(ticket.runbook_executions)
 
 elif view == 'Agent View':
     st.header('Agent dashboard')
@@ -77,7 +81,7 @@ elif view == 'Agent View':
         st.subheader(t.subject)
         st.write(t.description)
         if st.button('Execute reset_password', key=f'exec-{sel}'):
-            rb = st.session_state['agents']['runbook']
+            rb = st.session_state['agents']['runbook_id']
             res = rb.consider_and_run(t, 'reset_password')
             st.json(res)
         note = st.text_area('Add note')
