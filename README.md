@@ -1,9 +1,9 @@
 # MicrosoftChallenge
 ## Chalenge being solved: Auto-resolve Service Desk
 
-## Service Central
+## Service Central Udia
 
-Service Central is a modern, scalable support platform designed to automate repetitive service-desk tasks while safely escalating complex cases to humans. Built with Streamlit, Hugging Face Inference, and Azure AD SSO, the system orchestrates multiple cooperative AI agents to understand user requests, fill in missing details, retrieve relevant knowledge, execute secure runbooks, and explain every step.
+Service Central Udia is a modern, scalable support platform designed to automate repetitive service-desk tasks while safely escalating complex cases to humans. Built with Streamlit, Hugging Face Inference, and Azure AD SSO, the system orchestrates multiple cooperative AI agents to understand user requests, fill in missing details, retrieve relevant knowledge, execute secure runbooks, and explain every step.
 
 The solution reduces wait times, increases transparency, and enables organizations to handle IT, HR, Finance, Facilities, or Customer Support inquiries with confidence and auditability.
 
