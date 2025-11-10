@@ -10,3 +10,5 @@ Production-ready scaffold for a multi-agent Service Central:
 - Runbooks and safe automation (app/services/runbooks.py)
 - Tests (tests/)
 - Docker + GitHub Actions
+
+##Chalenge being solved: Auto-resolve Service Desk
