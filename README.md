@@ -1,4 +1,5 @@
 # MicrosoftChallenge
+## Chalenge being solved: Auto-resolve Service Desk
 
 ## Service Central
 
@@ -11,4 +12,4 @@ Production-ready scaffold for a multi-agent Service Central:
 - Tests (tests/)
 - Docker + GitHub Actions
 
-##Chalenge being solved: Auto-resolve Service Desk
+
