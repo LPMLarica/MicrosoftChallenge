@@ -1,5 +1,9 @@
 import os
 from dataclasses import dataclass
+import dotenv
+
+
+dotenv.load_dotenv()
 
 @dataclass
 class Settings:

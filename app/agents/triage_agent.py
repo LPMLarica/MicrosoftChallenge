@@ -1,4 +1,5 @@
 from core.hf_client import get_hf_client
+from agents.intake_agent import now_iso
 import json
 
 class TriageAgent:
@@ -8,7 +9,7 @@ class TriageAgent:
         self.hf = get_hf_client()
 
     def log(self, ticket, action, detail, confidence=0.0):
-        ticket.steps.append({'actor':self.name,'ts':None,'action':action,'detail':detail,'confidence':confidence})
+        ticket.steps.append({'actor':self.name,'ts':now_iso(),'action':action,'detail':detail,'confidence':confidence})
 
     def triage(self, ticket):
         labels = ['Password Reset','HR Request','Finance Issue','Access Problem','Other']

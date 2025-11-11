@@ -4,7 +4,6 @@ from typing import List
 
 class HFLocalClient:
     def __init__(self):
-        # Zero-shot classifier 
         try:
             self.classifier = pipeline('zero-shot-classification', model='facebook/bart-large-mnli')
         except Exception:

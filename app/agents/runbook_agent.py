@@ -1,4 +1,5 @@
 from services.runbooks import evaluate_runbook_safety, execute_runbook
+from agents.intake_agent import now_iso
 
 class RunbookAgent:
     def __init__(self, name, knowledge):
@@ -6,7 +7,7 @@ class RunbookAgent:
         self.knowledge = knowledge
 
     def log(self, ticket, action, detail):
-        ticket.steps.append({'actor':self.name,'ts':None,'action':action,'detail':detail})
+        ticket.steps.append({'actor':self.name,'ts':now_iso(),'action':action,'detail':detail})
 
     def consider_and_run(self, ticket, runbook_id, auto_approve=False):
         self.log(ticket, 'consider_runbook', runbook_id)

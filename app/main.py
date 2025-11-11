@@ -1,4 +1,3 @@
-"""Streamlit entry for Service Central - Free HF edition"""
 import streamlit as st
 from agents.intake_agent import IntakeAgent
 from agents.triage_agent import TriageAgent
@@ -20,7 +19,7 @@ if 'agents' not in st.session_state:
     st.session_state['agents'] = {
         'intake': IntakeAgent('IntakeAgent', st.session_state['knowledge']),
         'triage': TriageAgent('TriageAgent', st.session_state['knowledge']),
-        'runbook_id': RunbookAgent('RunbookAgent', st.session_state['knowledge']),
+        'runbook': RunbookAgent('RunbookAgent', st.session_state['knowledge']),
         'human': HumanAgent('HumanAgent', st.session_state['knowledge'])
     }
 
@@ -58,7 +57,7 @@ elif view == 'Ticket Queue':
                 triage = st.session_state['agents']['triage']
                 decision = triage.triage(ticket)
                 if decision.get('suggested_runbook'):
-                    rb = st.session_state['agents']['runbook_id']
+                    rb = st.session_state['agents']['runbook']
                     res = rb.consider_and_run(ticket, decision['suggested_runbook'], auto_approve=True)
                     st.json(res)
                 else:
@@ -81,7 +80,7 @@ elif view == 'Agent View':
         st.subheader(t.subject)
         st.write(t.description)
         if st.button('Execute reset_password', key=f'exec-{sel}'):
-            rb = st.session_state['agents']['runbook_id']
+            rb = st.session_state['agents']['runbook']
             res = rb.consider_and_run(t, 'reset_password')
             st.json(res)
         note = st.text_area('Add note')

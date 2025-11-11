@@ -9,8 +9,10 @@ class VectorKnowledge:
         ]
 
     def search(self, q, top_k=3):
+        if not isinstance(q, str) or not q.strip():
+            return []
+        
         ql = q.lower()
         res = [d for d in self.docs if ql in d['text'].lower() or ql in d['title'].lower()]
-        if not res:
-            res = self.docs[:top_k]
+        
         return res[:top_k]
